@@ -2,17 +2,16 @@
 .SYNOPSIS
     Module to write log-files
 .DESCRIPTION
-    This module writes log-files in the folder 'Logs'.
-    The Folder will be created, if it does not exist yet.
+    This module provides the function "Write-Log".
+    It writes log-files in a specified folder.
+    For further Description, Get Help directly from the function after importing it:
+    Get-Help Write-Log
 .EXAMPLE
     PS C:\> Import-Module ".\Modules\Write-Log.psm1" -Force
-    Explanation of what the example does
-.INPUTS
-    Inputs (if any)
-.OUTPUTS
-    Output (if any)
+    Imports the Module to use in the script
 .NOTES
-    General notes
+    Author:         Murphy4444
+    Creation Date:  09. Nov 2020
 #>
 
 enum SeverityLevel {
@@ -24,6 +23,31 @@ enum SeverityLevel {
 
 
 function Write-Log {
+    <#
+    .SYNOPSIS
+    Function to write log-files
+    .DESCRIPTION
+    This function writes log-files in a specified folder.
+    The Folder will be created, if it does not exist yet.
+    .EXAMPLE
+    PS C:\> Write-Log -Message "This is a log Message" -Severity "Error"
+    .INPUTS
+    Message, Severity and optionally the LogPath
+    .PARAMETER Severity
+    Can be one of the following Levels (next to it is the ForeGroundColor that will be displayed):
+     - Info             :       Green
+     - Warning          :       Yellow
+     - Error            :       Red
+     - TerminatingError :       DarkRed
+    
+    .OUTPUTS
+    The Provided Message in the according ForeGroundColor
+    .NOTES
+    Author:         Murphy4444
+    Creation Date:  09. Nov 2020
+    #>
+
+
     [CmdletBinding(DefaultParameterSetName = 'None')]
     param (
         [Parameter(Mandatory = $true)][Alias("Msg")]
