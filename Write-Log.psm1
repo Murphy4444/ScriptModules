@@ -42,9 +42,17 @@ function Write-Log {
     
     .OUTPUTS
     The Provided Message in the according ForeGroundColor
+    An Entry in the specified Logfile
+
     .NOTES
     Author:         Murphy4444
     Creation Date:  09. Nov 2020
+
+    History
+    -------
+    Author:         Murphy4444
+    Date:           07. Jun 2021
+    Change Note:    Noticed that script doesn't do what it says it does, so I did something about that.
     #>
 
 
@@ -57,21 +65,22 @@ function Write-Log {
         [Parameter(Mandatory = $false)]
         [string]$LogPath = "C:\Temp\Log.log"
     )
+
+    if (!(Test-Path $LogPath)) {
+        New-Item -Force $LogPath
+    }
+
     $Date = Get-Date -UFormat "%d.%m.%Y %H:%M:%S"
 
-    $ErrString = ""
-    if ($IsError) {
-        $ErrString = "Error: "
-    } 
-    if ($Terminating) {
-        $ErrString = "Terminating $ErrString"
-    }
-    $LogMsg = "[$Date]`t$ErrString$Message"
+    $Prefix = ""
     switch ($Severity) {
-        "Warning" { $Color = "Yellow"; break }
-        "Error" { $Color = "Red"; break }
-        "TerminatingError" { $Color = "DarkRed"; break }
+        "Warning" { $Color = "Yellow"; $Prefix = "Warning: " ; break }
+        "Error" { $Color = "Red"; $Prefix = "Error: "; break }
+        "TerminatingError" { $Color = "DarkRed"; $Prefix = "Terminating Error: "; break }
         Default { $Color = "Green"; break }
     }
+    $LogMsg = "[$Date]`t$Prefix$Message"
+
     Write-Host $LogMsg -ForegroundColor:$Color
+    Add-Content -Value $LogMsg -Path $LogPath
 }
